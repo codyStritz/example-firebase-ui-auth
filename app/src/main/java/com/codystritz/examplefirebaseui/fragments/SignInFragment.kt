@@ -1,7 +1,6 @@
 package com.codystritz.examplefirebaseui.fragments
 
 import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.navigation.fragment.findNavController
 import com.codystritz.examplefirebaseui.R
-import com.codystritz.examplefirebaseui.activities.MainActivity
 import com.codystritz.examplefirebaseui.databinding.FragmentSignInBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -22,6 +19,7 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.codystritz.examplefirebaseui.utils.OnScreenMessages.showToast
 
 
 class SignInFragment : Fragment() {
@@ -55,14 +53,10 @@ class SignInFragment : Fragment() {
                 findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
             }
             else -> {
-                blockUnverifiedEmail()  //Todo: rename to handleUnverifiedEmail
+                handleUnverifiedEmail()
             }
         }
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//    }
 
     private fun getSignInIntent(): Intent {
         // Build Intent with sign in options for FirebaseUI
@@ -83,8 +77,8 @@ class SignInFragment : Fragment() {
         val response: IdpResponse? = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             Log.d(TAG, "Sign in successful!")
-            if(response?.isNewUser == true) {
-                if(auth.currentUser != null) {
+            if (response?.isNewUser == true) {
+                if (auth.currentUser != null) {
                     if (!auth.currentUser!!.isEmailVerified) {
                         val newUser = auth.currentUser
                         sendVerificationEmail(newUser!!)
@@ -93,16 +87,15 @@ class SignInFragment : Fragment() {
                     }
                 }
             } else {
-                if(auth.currentUser != null) {
+                if (auth.currentUser != null) {
                     if (auth.currentUser!!.isEmailVerified) {
                         goToHomeFragment()
                     } else {                                        // Email not verified
-                        blockUnverifiedEmail()
+                        handleUnverifiedEmail()
                     }
                 }
             }
         } else {
-//            Toast.makeText(context, "There was an error signing in", Toast.LENGTH_LONG).show()
             requireActivity().finish()
             if (response == null) {
                 Log.w(TAG, "Sign in canceled")
@@ -112,16 +105,7 @@ class SignInFragment : Fragment() {
         }
     }
 
-//    private fun showVerifyEmailDialog() {
-//        AlertDialog.Builder(context)
-//            .setTitle("Notice")
-//            .setMessage("Please verify your email before signing in")
-//            .setPositiveButton("Okay") {_,_ -> signOut()}
-//            .create()
-//            .show()
-//    }
-
-    private fun blockUnverifiedEmail() {
+    private fun handleUnverifiedEmail() {
         val signOutTask: Task<Void> = AuthUI.getInstance().signOut(requireContext())
         signOutTask.addOnSuccessListener {
             val action = SignInFragmentDirections.actionSignInFragmentToVerifyEmailFragment()
@@ -139,14 +123,13 @@ class SignInFragment : Fragment() {
         firebaseUser.sendEmailVerification()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    blockUnverifiedEmail()
+                    handleUnverifiedEmail()
                 } else {
-                    //ToDO: Make function for displaying different toast messages
-                    Toast.makeText(context, "Error: " + it.exception, Toast.LENGTH_LONG).show()
+                    showToast(requireContext(), "Error")
                 }
             }
             .addOnCanceledListener {
-                Toast.makeText(context, "Email not sent", Toast.LENGTH_LONG).show()
+                showToast(requireContext(), "Email not sent")
             }
     }
 

@@ -1,14 +1,13 @@
 package com.codystritz.examplefirebaseui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.codystritz.examplefirebaseui.R
 import com.codystritz.examplefirebaseui.databinding.FragmentVerifyEmailBinding
+import com.codystritz.examplefirebaseui.utils.OnScreenMessages.showVerifyEmailDialog
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -30,16 +29,7 @@ class VerifyEmailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showVerifyEmailDialog()
-    }
-
-    private fun showVerifyEmailDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Notice")
-            .setMessage("Please verify your email before signing in")
-            .setPositiveButton("Okay") {_,_ -> goToSignInFragment()}
-            .create()
-            .show()
+        showVerifyEmailDialog(requireContext(), ::goToSignInFragment)
     }
 
     private fun goToSignInFragment() {

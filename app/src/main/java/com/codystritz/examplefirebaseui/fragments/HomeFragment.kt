@@ -30,11 +30,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.emailLabel.text = auth.currentUser?.email
-        binding.signOutButton.setOnClickListener {
-            signOut()
-        }
+        binding.signOutButton.setOnClickListener { signOut() }
     }
 
     private fun signOut() {
