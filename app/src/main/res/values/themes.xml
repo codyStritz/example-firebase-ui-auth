@@ -22,4 +22,9 @@
     <style name="Theme.ExampleFirebaseUI.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ExampleFirebaseUI.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    // FirebaseUI Theme
+    <style name="CustomFirebaseTheme" parent="FirebaseUI">
+        <item name="android:windowBackground">@drawable/abstract_bg</item>
+    </style>
 </resources>
