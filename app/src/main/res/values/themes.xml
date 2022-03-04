@@ -25,6 +25,8 @@
 
     // FirebaseUI Theme
     <style name="CustomFirebaseTheme" parent="FirebaseUI">
-        <item name="android:windowBackground">@drawable/abstract_bg</item>
+        <item name="android:windowBackground">@drawable/my_bg</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>
