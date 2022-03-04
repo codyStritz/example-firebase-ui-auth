@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.codystritz.examplefirebaseui.R
 import com.codystritz.examplefirebaseui.databinding.FragmentSignInBinding
@@ -63,6 +64,7 @@ class SignInFragment : Fragment() {
         return AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setIsSmartLockEnabled(false)
+            .setTheme(R.style.CustomFirebaseTheme)
             .setLogo(R.mipmap.ic_launcher_round)
             .setAvailableProviders(
                 listOf(
@@ -137,6 +139,20 @@ class SignInFragment : Fragment() {
         findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
     }
 
+    override fun onStart() {
+        super.onStart()
+        (activity as AppCompatActivity).supportActionBar?.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity).supportActionBar?.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity).supportActionBar?.hide()
+    }
     companion object {
         private const val TAG = "SignInFragment"
     }
